@@ -431,10 +431,12 @@ function performTransfer() {
     return;
   }
 
-  if (amount > fromPlayer.buyIns) {
-    transferError.textContent = fromPlayer.name + " only has " + fromPlayer.buyIns + " buy-ins.";
-    return;
-  }
+  // Note: a transfer is allowed to push the sender's buy-ins below 0.
+  // This covers the case where a player is holding profit chips but has
+  // 0 (or few) buy-ins on record, and gives a buy-in's worth of chips to
+  // someone else at the table. Their buy-in count going negative correctly
+  // reduces their "investment" in the profit/loss formula, matching what
+  // actually happened physically.
 
   // Perform the transfer
   fromPlayer.buyIns -= amount;
